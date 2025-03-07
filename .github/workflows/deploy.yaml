@@ -33,10 +33,12 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: "us-east-1"
-    
+
+    - name: Check environment variable
+      run: echo "CD_APP_NAME=${{ env.CD_APP_NAME }}"
     - name: Create CodeDeploy App
       run: aws deploy create-application \
-        --application-name env.CD_APP_NAME \
+        --application-name ${{ env.CD_APP_NAME }} \
         --compute-platform "Server"
     - name: Create Deployment Group
       run: aws deploy create-deployment-group \
