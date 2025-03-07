@@ -42,7 +42,8 @@ jobs:
         --application-name ${{ env.CD_APP_NAME }} \
         --compute-platform "Server"
     - name: Create Deployment Group
-      run: aws deploy create-deployment-group \
+      run: |
+        aws deploy create-deployment-group \
         --application-name ${{ env.CD_APP_NAME }} \
         --deployment-group-name ${{ env.CD_GROUP_NAME }} \
         --service-role-arn ${{ github.IAM_ROLE }} \
@@ -50,7 +51,8 @@ jobs:
         --ec2-tag-filters Key=${{ github.EC2_TAG_KEY }},Value=${{ github.EC2_TAG_VALUE }},Type="KEY_AND_VALUE"
         #--deployment-config-name no hace falta ponerlo cuando se quiere emplear el "one-at-a-time", como es el caso
     - name: Create Deployment
-      run: aws deploy create-deployment \
+      run: |
+        aws deploy create-deployment \
         --application-name ${{ env.CD_APP_NAME }} \
         --deployment-group-name ${{ env.CD_GROUP_NAME }} \
         --github-location repository=${{ env.GITHUB_REPOSITORY }},commitId=${{ env.GITHUB_SHA }}
