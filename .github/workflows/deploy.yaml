@@ -1,0 +1,54 @@
+name: Deploy application
+
+on:
+  workflow_run:
+    workflows:
+    - Test Application
+    types:
+    - completed
+
+env:
+  CD_APP_NAME: "GithubActions"
+  CD_GROUP_NAME: "CD-GitActions"
+
+jobs:
+  deploy:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 21
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+    
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+        aws-region: ${{ vrs.AWS_REGION }}
+    
+    - name: Create CodeDeploy App
+      run: aws deploy create-application \
+        --application-name ${{ env.CD_APP_NAME }} \
+        --compute-platform "Server"
+    - name: Create Deployment Group
+      run: aws deploy create-deployment-group \
+        --application-name ${{ env.CD_APP_NAME }} \
+        --deployment-group-name ${{ env.CD_GROUP_NAME }} \
+        --service-role-arn ${{ vrs.IAM_ROLE }} \
+        --deployment-style deploymentType="IN_PLACE",deploymentOption="WITHOUT_TRAFFIC_CONTROL" \
+        --ec2-tag-filters Key=${{ EC2_TAG_KEY }},Value=${{ EC2_TAG_VALUE }},Type="KEY_AND_VALUE"
+         #--deployment-config-name no hace falta ponerlo cuando se quiere emplear el "one-at-a-time", como es el caso
+    - name: Create Deployment
+      run: aws deploy create-deployment \
+        --application-name ${{ env.CD_APP_NAME }} \
+        --deployment-group-name ${{ env.CD_GROUP_NAME }} \
+        --github-location repository=${{ env.GITHUB_REPOSITORY }},commitId=${{ env.GITHUB_SHA }}
+        #--revision revisionType="GitHub",s3Location=,gitHubLocation={repository=${{ env.GITHUB_REPOSITORY }},commitId=${{ env.GITHUB_SHA }}},string=,appSpecContent=
