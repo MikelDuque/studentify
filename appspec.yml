@@ -3,7 +3,7 @@ os: linux
 files:
   - source: studentify.war
     destination: /opt/tomcat/webapps/
-    file_exists_behavior: OVERWRITE
+file_exists_behavior: OVERWRITE
 hooks:
   ApplicationStop:
     - location: deploy-scripts/appstop.sh
@@ -15,5 +15,9 @@ hooks:
       runas: root
   ApplicationStart:
     - location: deploy-scripts/appstart.sh
+      timeout: 300
+      runas: root
+  AfterInstall:
+    - location: deploy-scripts/afterinstall.sh
       timeout: 300
       runas: root
