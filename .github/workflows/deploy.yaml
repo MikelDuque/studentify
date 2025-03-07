@@ -36,8 +36,6 @@ jobs:
         aws deploy create-application \
         --application-name ${{ env.CD_APP_NAME }} \
         --compute-platform "Server"
-    - name: Check environment variable
-      run: echo "Role=${{env.IAM_ROLE}}"
     - name: Create Deployment Group
       run: |
         aws deploy create-deployment-group \
@@ -53,3 +51,4 @@ jobs:
         --application-name ${{ env.CD_APP_NAME }} \
         --deployment-group-name ${{ env.CD_GROUP_NAME }} \
         --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
+        --file-exists-behavior RETAIN
