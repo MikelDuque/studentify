@@ -10,8 +10,8 @@ on:
 env:
   CD_APP_NAME: "GithubActions"
   CD_GROUP_NAME: "CD-GitActions"
-  AWS-REGION: "us-east-1"
-  IAM-ROLE: "arn:aws:iam::839596390359:role/LabRole"
+  AWS_REGION: "us-east-1"
+  IAM_ROLE: "arn:aws:iam::839596390359:role/LabRole"
   EC2_TAG_KEY: "aws:cloudformation:stack-name"
   EC2_TAG_VALUE: "CodeDeploy-Backend"
 
@@ -36,7 +36,7 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
-        aws-region: ${{ env.AWS-REGION }}
+        aws-region: ${{ env.AWS_REGION }}
 
     - name: Create CodeDeploy App
       run: |
