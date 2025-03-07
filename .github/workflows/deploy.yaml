@@ -35,8 +35,8 @@ jobs:
         aws-region: "us-east-1"
     
     - name: Create CodeDeploy App
-      run: aws deploy create-application\
-        --application-name ${{ env.CD_APP_NAME }}\
+      run: aws deploy create-application \
+        --application-name ${ env.CD_APP_NAME } \
         --compute-platform "Server"
     - name: Create Deployment Group
       run: aws deploy create-deployment-group \
