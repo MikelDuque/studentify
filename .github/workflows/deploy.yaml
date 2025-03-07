@@ -34,19 +34,23 @@ jobs:
         aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
         aws-region: "us-east-1"
 
-    - name: Check environment variable
-      run: echo "CD_APP_NAME=${{ env.CD_APP_NAME }}"
     - name: Create CodeDeploy App
       run: |
         aws deploy create-application \
         --application-name ${{ env.CD_APP_NAME }} \
         --compute-platform "Server"
+    - name: Check environment variable
+      run: echo "Role 1=${{ github.IAM_ROLE }}"
+    - name: Check environment variable
+      run: echo "Role 2=${ github.IAM_ROLE }"
+    - name: Check environment variable
+      run: echo "Role 3= github.IAM_ROLE "
     - name: Create Deployment Group
       run: |
         aws deploy create-deployment-group \
         --application-name ${{ env.CD_APP_NAME }} \
         --deployment-group-name ${{ env.CD_GROUP_NAME }} \
-        --service-role-arn ${{ github.IAM_ROLE }} \
+        --service-role-arn ${ github.IAM_ROLE } \
         --deployment-style deploymentType="IN_PLACE",deploymentOption="WITHOUT_TRAFFIC_CONTROL" \
         --ec2-tag-filters Key=${{ github.EC2_TAG_KEY }},Value=${{ github.EC2_TAG_VALUE }},Type="KEY_AND_VALUE"
         #--deployment-config-name no hace falta ponerlo cuando se quiere emplear el "one-at-a-time", como es el caso
