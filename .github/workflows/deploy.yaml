@@ -10,6 +10,7 @@ on:
 env:
   CD_APP_NAME: "GithubActions"
   CD_GROUP_NAME: "CD-GitActions"
+  IAM_ROLE: ${{ github.IAM_ROLE }}
 
 jobs:
   deploy:
@@ -39,18 +40,12 @@ jobs:
         aws deploy create-application \
         --application-name ${{ env.CD_APP_NAME }} \
         --compute-platform "Server"
-    - name: Check environment variable
-      run: echo "Role 1=${{ github.IAM_ROLE }}"
-    - name: Check environment variable
-      run: echo "Role 2=${ github.IAM_ROLE }"
-    - name: Check environment variable
-      run: echo "Role 3= github.IAM_ROLE "
     - name: Create Deployment Group
       run: |
         aws deploy create-deployment-group \
         --application-name ${{ env.CD_APP_NAME }} \
         --deployment-group-name ${{ env.CD_GROUP_NAME }} \
-        --service-role-arn ${ github.IAM_ROLE } \
+        --service-role-arn ${{ env.IAM_ROLE }} \
         --deployment-style deploymentType="IN_PLACE",deploymentOption="WITHOUT_TRAFFIC_CONTROL" \
         --ec2-tag-filters Key=${{ github.EC2_TAG_KEY }},Value=${{ github.EC2_TAG_VALUE }},Type="KEY_AND_VALUE"
         #--deployment-config-name no hace falta ponerlo cuando se quiere emplear el "one-at-a-time", como es el caso
