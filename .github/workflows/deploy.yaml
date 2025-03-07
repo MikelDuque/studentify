@@ -53,11 +53,11 @@ jobs:
         --service-role-arn ${{ env.IAM_ROLE }} \
         --deployment-style deploymentType="IN_PLACE",deploymentOption="WITHOUT_TRAFFIC_CONTROL" \
         --ec2-tag-filters Key=${{ env.EC2_TAG_KEY }},Value=${{ env.EC2_TAG_VALUE }},Type="KEY_AND_VALUE"
-        #--deployment-config-name no hace falta ponerlo cuando se quiere emplear el "one-at-a-time", como es el caso
+      #--deployment-config-name no hace falta ponerlo cuando se quiere emplear el "one-at-a-time", como es el caso
     - name: Create Deployment
       run: |
         aws deploy create-deployment \
         --application-name ${{ env.CD_APP_NAME }} \
         --deployment-group-name ${{ env.CD_GROUP_NAME }} \
-        --github-location repository=${{ env.GITHUB_REPOSITORY }},commitId=${{ env.GITHUB_SHA }}
-        #--revision revisionType="GitHub",s3Location=,gitHubLocation={repository=${{ env.GITHUB_REPOSITORY }},commitId=${{ env.GITHUB_SHA }}},string=,appSpecContent=
+        --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
+      #--revision revisionType="GitHub",s3Location=,gitHubLocation={repository=${{ env.GITHUB_REPOSITORY }},commitId=${{ env.GITHUB_SHA }}},string=,appSpecContent=
