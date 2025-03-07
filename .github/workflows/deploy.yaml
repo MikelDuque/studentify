@@ -22,14 +22,7 @@ jobs:
     permissions:
       contents: read
 
-    steps:
-    # - uses: actions/checkout@v4
-    # - name: Set up JDK 21
-    #   uses: actions/setup-java@v4
-    #   with:
-    #     java-version: '21'
-    #     distribution: 'temurin'
-    
+    steps: 
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v4
       with:
@@ -60,4 +53,3 @@ jobs:
         --application-name ${{ env.CD_APP_NAME }} \
         --deployment-group-name ${{ env.CD_GROUP_NAME }} \
         --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
-      #--revision revisionType="GitHub",s3Location=,gitHubLocation={repository=${{ env.GITHUB_REPOSITORY }},commitId=${{ env.GITHUB_SHA }}},string=,appSpecContent=
