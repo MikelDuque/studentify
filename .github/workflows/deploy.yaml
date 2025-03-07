@@ -40,6 +40,8 @@ jobs:
         aws deploy create-application \
         --application-name ${{ env.CD_APP_NAME }} \
         --compute-platform "Server"
+    - name: Check environment variable
+      run: echo "Role=${{env.IAM_ROLE}}"
     - name: Create Deployment Group
       run: |
         aws deploy create-deployment-group \
