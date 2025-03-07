@@ -3,7 +3,7 @@ os: linux
 files:
   - source: studentify.war
     destination: /opt/tomcat/webapps/
-    file_exists_behavior: OVERWRITE
+file_exists_behavior: OVERWRITE
 hooks:
   ApplicationStop:
     - location: deploy-scripts/appstop.sh
