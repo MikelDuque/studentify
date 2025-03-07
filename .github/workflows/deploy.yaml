@@ -10,7 +10,7 @@ on:
 env:
   CD_APP_NAME: "GithubActions"
   CD_GROUP_NAME: "CD-GitActions"
-  AWS-REGION: ${{ github.AWS-REGION }}
+  AWS-REGION: "us-east-1"
   IAM-ROLE: "arn:aws:iam::839596390359:role/LabRole"
   EC2_TAG_KEY: "aws:cloudformation:stack-name"
   EC2_TAG_VALUE: "CodeDeploy-Backend"
