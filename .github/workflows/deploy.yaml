@@ -36,6 +36,7 @@ jobs:
         aws deploy create-application \
         --application-name ${{ env.CD_APP_NAME }} \
         --compute-platform "Server"
+        --file-exists-behavior "RETAIN"
     - name: Create Deployment Group
       run: |
         aws deploy create-deployment-group \
@@ -44,6 +45,7 @@ jobs:
         --service-role-arn ${{ env.IAM_ROLE }} \
         --deployment-style deploymentType="IN_PLACE",deploymentOption="WITHOUT_TRAFFIC_CONTROL" \
         --ec2-tag-filters Key=${{ env.EC2_TAG_KEY }},Value=${{ env.EC2_TAG_VALUE }},Type="KEY_AND_VALUE"
+        --file-exists-behavior "RETAIN"
       #--deployment-config-name no hace falta ponerlo cuando se quiere emplear el "one-at-a-time", como es el caso
     - name: Create Deployment
       run: |
@@ -51,4 +53,4 @@ jobs:
         --application-name ${{ env.CD_APP_NAME }} \
         --deployment-group-name ${{ env.CD_GROUP_NAME }} \
         --github-location repository=${{ github.repository }},commitId=${{ github.sha }}
-        --file-exists-behavior RETAIN
+        --file-exists-behavior "RETAIN"
